@@ -68,7 +68,7 @@ background-color: inherit;
             var userQuestion = document.getElementById("userQuestion").value;
 
             var formSubmit = true;
-            var messageBody = "The Account Id is " + account + " and the SR in question is " + sr + ".";
+            var messageBody = "Account Id: " + account + " - Service Request #: " + sr + ".\n"+userQuestion;
 
             if (account.length < 1 || sr.length < 1 || userQuestion.length < 1) {
                 window.alert("Please fill out all required fields");
@@ -83,8 +83,7 @@ background-color: inherit;
                     form: {
                         firstname: first,
                         lastname: last,
-                        subject: userQuestion,
-                        text: messageBody,
+                        subject: messageBody,
                     autoSubmit: true
                     }
                 });
@@ -96,8 +95,7 @@ background-color: inherit;
                     form: {
                         firstname: first,
                         lastname: last,
-                        subject: userQuestion,
-                        text: messageBody,
+                        subject: messageBody,
                         autoSubmit: true
                     }
                 }
