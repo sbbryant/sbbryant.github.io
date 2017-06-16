@@ -70,7 +70,7 @@ background-color: inherit;
             var formSubmit = true;
             var messageBody = "Account Id: " + account + " - Service Request #: " + sr + ".\n"+userQuestion;
 
-            if (account.length < 1 || sr.length < 1 || userQuestion.length < 1) {
+            if (account.length < 1 || first.length < 1 || last.length < 1 || userQuestion.length < 1) {
                 window.alert("Please fill out all required fields");
                 return;
             }
@@ -163,7 +163,7 @@ background-color: inherit;
                                                 <label class="control-label i18n" for="cx_webchat_form_sr">Service Request #:</label>
                                             </th>
                                             <td>
-                                                <input id="sr" class="form-control i18n" maxlength="100" name="sr" type="text" placeholder="Required" required>
+                                                <input id="sr" class="form-control i18n" maxlength="100" name="sr" type="text" placeholder="Optional" required>
                                             </td>
                                         </tr>
                                         <tr>
