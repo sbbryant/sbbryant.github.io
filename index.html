@@ -83,11 +83,14 @@ background-color: inherit;
                     form: {
                         firstname: first,
                         lastname: last,
-                        subject: messageBody,
-			message: messageBody,
+                        subject: 'New CCL Question',
                     	autoSubmit: true
                     }
                 });
+		window._genesys.widgets.bus.command("WebChat.injectMessage", {
+			name: 'Agent Question',
+			text: messageBody
+		});
             } else {
                 window.alert("There are errors");
             }
@@ -109,7 +112,7 @@ background-color: inherit;
                 <div class="cx-titlebar">
                     <div class="cx-icon"></div>
                     <div class="cx-icon"></div>
-                    <div class="cx-title i18n" data-message="Title">Ask CCL!<span style='float:right'>V 0.4</span>
+                    <div class="cx-title i18n" data-message="Title">Ask CCL!<span style='float:right'>V 0.5</span>
                         <div class="cx-webchat-counter"></div>
                     </div>
                 </div>
