@@ -84,26 +84,10 @@ background-color: inherit;
                         firstname: first,
                         lastname: last,
                         subject: messageBody,
-                    autoSubmit: true
+			message: messageBody,
+                    	autoSubmit: true
                     }
                 });
-
-                var test = {
-                    userData: {
-                        Interaction_Override: "CCT_REQUEST"
-                    },
-                    form: {
-                        firstname: first,
-                        lastname: last,
-			subject: 'New CCL Question',
-                        message: messageBody,
-                        autoSubmit: true
-                    }
-                }
-
-                setTimeout(function() {
-                    //document.getElementById("container").style.display = "none";
-                }, 500);
             } else {
                 window.alert("There are errors");
             }
@@ -125,7 +109,7 @@ background-color: inherit;
                 <div class="cx-titlebar">
                     <div class="cx-icon"></div>
                     <div class="cx-icon"></div>
-                    <div class="cx-title i18n" data-message="Title">Ask CCL!<span style='float:right'>V 0.3</span>
+                    <div class="cx-title i18n" data-message="Title">Ask CCL!<span style='float:right'>V 0.4</span>
                         <div class="cx-webchat-counter"></div>
                     </div>
                 </div>
