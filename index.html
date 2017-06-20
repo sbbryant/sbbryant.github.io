@@ -1,181 +1,195 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 
-<HEAD>
-    <!-- Genesys Chat CSS -->
-    <link id="genesys-widgets-styles" rel="stylesheet" href="./css/widgets.min.css" type="text/css" />
-    <!-- Genesys Chat script -->
-    <script>
-        if (!window._genesys) window._genesys = {};
-        if (!window._gt) window._gt = [];
-
-        window._genesys.widgets = {
-            main: {
-                theme: "light", //Default: Dark, Light
-                lang: "en",
-                customStylesheetID: "genesys_widgets_custom", //Allows for custom CSS packages
-                plugins: [ //Plugins needed to run chat. Do not edit
-                    "cx-webchat",
-                    "cx-webchat-service"
-                ]
-            },
-            webchat: {
-                dataURL: "https://api.genesyscloud.com/gms-chat/2/customer-chat", //Leave api url alone
-                apikey: "Qs8cL10xMameD3SJ69FbVMwAB1kU9aLj", //Leave API Key alone
-                userData: {
-                    emojis: true, //Allows auto converted text to emoji support DEFAULT: True
-                    actionsMenu: false, //Enable/disable actions menu next to chat message input. DEFAULT: True
-                    Interaction_Override: "CONSUMER_CARE_LEAD" //Overrides the origin of the chat since Genesys cannot parse our URLs
-                },
-                autoInvite: {
-                    enabled: false, //Sets to auto invite the consumer to chat. 
-                    timeToInviteSeconds: 5, //Sets time to invite after page load
-                    inviteTimeoutSeconds: 30 //Timeout for invite to disappear
-                },
-                chatButton: {
-                    enabled: false, //Shows sidebar chat button(May or may not be necessary for my needs
-                    template: "<div>Have a Question?</div>", //Allows for the custom templating of verbiage on the chat button
-                    effect: "fade", //Animation to fade the sidebar
-                    openDelay: 1000, //Delay in switch to form
-                    effectDuration: 300, //Duration of fade effect
-                    hideDuringInvite: true //Hides the sidebar during the toast invite
-                }
+    <HEAD>
+    
+        <!-- Genesys Chat CSS -->
+        <link id="genesys-widgets-styles" rel="stylesheet" href="./css/widgets.min.css" type="text/css" />
+        
+        
+        <!-- CUSTOM CSS -->
+        <style>
+            #container {
+                left: 10%;
+                width: 60%;
+                height: 380px;
+                top: 5%;
             }
-        };
-    </script>
-    <!-- CUSTOM CSS -->
-    <style>
-        #container {
-            left: 10%;
-            width: 80%;
-            height: 380px;
-            top: 5%;
-        }
-    </style>
-<style>
-html {
-background-color: inherit;
-}
-</style>
-    <!-- CUSTOM SCRIPTING -->
-    <script>
-        function sub() {
-            // user info from form
-            var first = document.getElementById("first").value;
-            var last = document.getElementById("last").value;
-            var account = document.getElementById("account").value;
-            var sr = document.getElementById("sr").value;
-            var userQuestion = document.getElementById("userQuestion").value;
-
-            var formSubmit = true;
-            var messageBody = "Account Id: " + account + " - Service Request #: " + sr + ".\n"+userQuestion;
-
-            if (account.length < 1 || first.length < 1 || last.length < 1 || userQuestion.length < 1) {
-                window.alert("Please fill out all required fields");
-                return;
+            html {
+                background-color: inherit;
             }
-
-            if (formSubmit) {
-                window._genesys.widgets.bus.command("WebChat.open", {
+        </style>  
+        
+        
+        <!-- Genesys Chat script -->
+        <script>
+            if (!window._genesys) window._genesys = {};
+            if (!window._gt) window._gt = [];
+    
+            window._genesys.widgets = {
+                main: {
+                    theme: "light", //Default: Dark, Light
+                    lang: "en",
+                    customStylesheetID: "genesys_widgets_custom", //Allows for custom CSS packages
+                    plugins: [ 
+                        "cx-webchat",
+                        "cx-webchat-service"
+                    ]
+                },
+                webchat: {
+                    dataURL: "https://api.genesyscloud.com/gms-chat/2/customer-chat", //Leave API URL alone
+                    apikey: "Qs8cL10xMameD3SJ69FbVMwAB1kU9aLj", //Leave API Key alone
                     userData: {
-                        Interaction_Override: "CCT_REQUEST"
+                        emojis: true, //Allows auto converted text to emoji support DEFAULT: True
+                        actionsMenu: false, //Enable/disable actions menu next to chat message input. DEFAULT: True
+                        Interaction_Override: "CONSUMER_CARE_LEAD" //Overrides the origin of the chat since Genesys cannot parse our URLs
                     },
-                    form: {
-                        firstname: first,
-                        lastname: last,
-                        subject: 'New CCL Question',
-                    	autoSubmit: true
+                    autoInvite: {
+                        enabled: false, //Sets to auto invite the consumer to chat. 
+                        timeToInviteSeconds: 5, //Sets time to invite after page load
+                        inviteTimeoutSeconds: 30 //Timeout for invite to disappear
+                    },
+                    chatButton: {
+                        enabled: false, //Shows sidebar chat button(May or may not be necessary for my needs
+                        template: "<div>Have a Question?</div>", //Allows for the custom templating of verbiage on the chat button
+                        effect: "fade", //Animation to fade the sidebar
+                        openDelay: 1000, //Delay in switch to form
+                        effectDuration: 300, //Duration of fade effect
+                        hideDuringInvite: true //Hides the sidebar during the toast invite
                     }
-                });
-		window._genesys.widgets.bus.command("WebChat.injectMessage", {
-			name: 'Agent Question',
-			text: messageBody
-		});
-            } else {
-                window.alert("There are errors");
-            }
-        }
-
-        function cancel() {
-            document.getElementById("container").style.display = "none";
-        }
-    </script>
-    <script id="genesys-widgets-script" src="./js/widgets.min.js"></script>
-
-</HEAD>
-
-<BODY>
-    <div class="cx-widget cx-window-manager cx-theme-kitchenaid custom-form" data-applianceType="Kitchenaid">
-        <div class="cx-widget cx-side-button-group" data-gcb-service-node="true"></div>
-        <div tabindex="0" class="cx-first cx-dock-manager-WebChat">
-            <div class="cx-widget ark cx-common-container cx-close cx-minimize cx-webchat" data-gcb-service-node="true" id='container' style="transition: right 1s cubic-bezier(0, 1, 0.5, 1), transform 0.5s ease-in-out; right: 55px; bottom: 0px;">
-                <div class="cx-titlebar">
-                    <div class="cx-icon"></div>
-                    <div class="cx-icon"></div>
-                    <div class="cx-title i18n" data-message="Title">Ask CCL!<span style='float:right'>V 0.5</span>
-                        <div class="cx-webchat-counter"></div>
+                }
+            };
+        </script>
+    
+    </HEAD>
+  
+    <BODY>
+        <div class="cx-widget cx-window-manager cx-theme-kitchenaid custom-form">
+            <div class="cx-widget cx-side-button-group"></div>
+            <div tabindex="0" class="cx-first cx-dock-manager-WebChat">
+                <div class="cx-widget ark cx-common-container cx-close cx-minimize cx-webchat" id='container'>
+                    <div class="cx-titlebar">
+                        <div class="cx-icon"><image src='https://www.whirlpool.com/etc/designs/whirlpool/digitalplatform/whirlpool/clientlibs/images/favicon.ico'/></div>
+                        <div style='float:right;font-size: 10px'>V0.7</div>
+                        <div class="cx-title" data-message="Title">Ask CCL! 
+                            <div class="cx-webchat-counter"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="cx-body">
-                    <div>
-                        <div class="form" role="form">
-                            <div>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <th>
-                                                <label class="control-label i18n" for="cx_webchat_form_firstname">First Name:</label>
-                                            </th>
-                                            <td>
-                                                <input class="form-control i18n" id="first" maxlength="100" name="firstname" type="text" placeholder="Required" required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label class="control-label i18n" for="cx_webchat_form_lastname">Last Name:</label>
-                                            </th>
-                                            <td>
-                                                <input class="form-control i18n" id="last" maxlength="100" name="lastname" type="text" placeholder="Required" required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label class="control-label i18n" for="cx_webchat_form_account">Account Id:</label>
-                                            </th>
-                                            <td>
-                                                <input id="account" class="form-control i18n" maxlength="100" name="account" type="text" placeholder="Required" required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label class="control-label i18n" for="cx_webchat_form_sr">Service Request #:</label>
-                                            </th>
-                                            <td>
-                                                <input id="sr" class="form-control i18n" maxlength="100" name="sr" type="text" placeholder="Optional" required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label class="control-label i18n" for="cx_webchat_form_subject">Question</label>
-                                            </th>
-                                            <td>
-                                                <textarea id="userQuestion" class="form-control i18n" maxlength="100" name="subject" type="text" placeholder="Required" required></textarea>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="cx-button-group cx-buttons-binary">
-                                <button class="cancel btn btn-default" onclick='cancel();'>Cancel</button>
-                                <button class="submit btn btn-primary" onclick='sub();'>Start Chat</button>
+                    <div class="cx-body">
+                        <div>
+                            <div class="form" role="form">
+                                <div>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <th>
+                                                    <label class="control-label" for="cx_webchat_form_firstname">First Name:</label>
+                                                </th>
+                                                <td>
+                                                    <input class="form-control" id="first" maxlength="100" name="firstname" type="text" placeholder="Required" required>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <label class="control-label" for="cx_webchat_form_lastname">Last Name:</label>
+                                                </th>
+                                                <td>
+                                                    <input class="form-control" id="last" maxlength="100" name="lastname" type="text" placeholder="Required" required>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <label class="control-label" for="cx_webchat_form_account">Account Id:</label>
+                                                </th>
+                                                <td>
+                                                    <input id="account" class="form-control" maxlength="100" name="account" type="text" placeholder="Required" required>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <label class="control-label" for="cx_webchat_form_sr">Service Request #:</label>
+                                                </th>
+                                                <td>
+                                                    <input id="sr" class="form-control" maxlength="100" name="sr" type="text" placeholder="Optional" required>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <label class="control-label" for="cx_webchat_form_subject">Question</label>
+                                                </th>
+                                                <td>
+                                                    <textarea id="userQuestion" class="form-control" maxlength="100" name="subject" type="text" placeholder="Required" required></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="cx-button-group cx-buttons-binary">
+                                    <button class="cancel btn btn-default" onclick='cancel();'>Cancel</button>
+                                    <button class="submit btn btn-primary" onclick='sub();'>Start Chat</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    
+    </BODY>
+    
+    
+    <!-- CUSTOM SCRIPTING -->
+    <script>
+        //Avoiding jquery to limit complications on housing code
+        function sub() {
+            // User info from form
+            var first = document.getElementById("first").value,
+                last = document.getElementById("last").value,
+                account = document.getElementById("account").value,
+                sr = document.getElementById("sr").value,
+                userQuestion = document.getElementById("userQuestion").value,
+                
+                // Message concatenation for injection
+                messageBody = "Account Id: " + account + "\nService Request #: " + sr + "\n"+userQuestion;
 
-</BODY>
+            // End if the form is not filled out adequately
+            if (account.length < 1 || first.length < 1 || last.length < 1 || userQuestion.length < 1) {
+                window.alert("Please fill out all required fields");
+                return;
+            }
+            
+            // Initiate the Genesys chat handshake
+            window._genesys.widgets.bus.command("WebChat.open", {
+                form: {
+                    firstname: first,
+                    lastname: last,
+                    subject: 'New CCL Question',
+                    autoSubmit: true
+                }
+            });
+            
+            //Inserts an injected chat message from the agent based on their question after the chat has had time to initialize.
+            //NOTE: Running this without a timeout results in the injectMessage method being called before the chat connects.
+            setTimeout(function() { 
+                window._genesys.widgets.bus.command('WebChat.injectMessage', {
+                    type: 'text',
+                    name: 'Agent',
+                    text: messageBody,
+                    custom: false
+                }).fail(function(e){
+                    window.alert(e);
+                });
+            }, 3000);
+        }
 
+        function cancel() {
+            document.getElementById("first").value = "";
+            document.getElementById("last").value = "";
+            document.getElementById("account").value = "";
+            document.getElementById("sr").value = "";
+            document.getElementById("userQuestion").value = "";
+        }
+    </script>
+    <script id="genesys-widgets-script" src="./js/widgets.min.js"></script>
+    
 </HTML>
